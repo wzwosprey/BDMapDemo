@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BDMapDemo</string>
+    <string name="demo_name_route">路径规划功能</string>
+</resources>
