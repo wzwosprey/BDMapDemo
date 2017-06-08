@@ -47,10 +47,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RoutePlanDemo"
+            android:name=".RoutePlanActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/demo_name_route"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".RoutePlanMapActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/demo_name_route"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.baidu.location.f"

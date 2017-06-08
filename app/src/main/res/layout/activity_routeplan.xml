@@ -1,66 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-              android:orientation="vertical" >
-
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="61dp"
-            android:layout_marginBottom="5dip"
-            android:layout_marginTop="5dip"
-            android:orientation="horizontal" android:weightSum="1">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2dp">
 
         <Button
-                android:id="@+id/mass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip"
-                android:onClick="searchButtonProcess"
-                android:text="跨城交通"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="起点" />
+
+        <EditText
+            android:id="@+id/et_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:padding="3dp"
+            android:singleLine="true"
+            android:text="天安门" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="2dp">
+
         <Button
-            android:id="@+id/drive"
-            android:layout_width="61dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="终点" />
+
+        <EditText
+            android:id="@+id/et_end"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:padding="3dp"
+            android:singleLine="true"
+            android:text="北京西站" />
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="61dp"
+        android:layout_marginBottom="5dip"
+        android:layout_marginTop="5dip"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/mass"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="2dip"
             android:layout_marginRight="2dip"
             android:onClick="searchButtonProcess"
+            android:text="跨城交通"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/drive"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_weight="1"
+            android:onClick="searchButtonProcess"
             android:text="驾车" />
 
         <Button
-                android:id="@+id/transit"
-                android:layout_width="61dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip"
-                android:onClick="searchButtonProcess"
-                android:text="公交"/>
+            android:id="@+id/transit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_weight="1"
+            android:onClick="searchButtonProcess"
+            android:text="公交" />
 
         <Button
-                android:id="@+id/walk"
-                android:layout_width="61dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip"
-                android:onClick="searchButtonProcess"
-                android:text="步行"/>
+            android:id="@+id/walk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_weight="1"
+            android:onClick="searchButtonProcess"
+            android:text="步行" />
+
         <Button
-                android:id="@+id/bike"
-                android:layout_width="61dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dip"
-                android:layout_marginRight="2dip"
-                android:onClick="searchButtonProcess"
-                android:text="骑行"/>
+            android:id="@+id/bike"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip"
+            android:layout_weight="1"
+            android:onClick="searchButtonProcess"
+            android:text="骑行" />
     </LinearLayout>
 
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <ListView
+        android:id="@+id/lv_route"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <com.baidu.mapapi.map.MapView
             android:id="@+id/map"
@@ -68,8 +122,7 @@
             android:layout_height="fill_parent"
             android:clickable="true" />
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -77,7 +130,7 @@
             android:layout_alignWithParentIfMissing="false"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dip"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <Button
                 android:id="@+id/customicon"
@@ -86,18 +139,18 @@
                 android:layout_marginTop="10dip"
                 android:layout_weight="1.0"
                 android:onClick="changeRouteIcon"
-                android:text="自定义起终点图标" />
+                android:text="自定义起终点图标"
+                android:visibility="gone" />
         </LinearLayout>
 
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignWithParentIfMissing="false"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="false"
-            android:layout_marginBottom="10dip" >
+            android:layout_marginBottom="10dip">
 
             <Button
                 android:id="@+id/pre"

@@ -4,32 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.poi.PoiSearch;
-import com.baidu.mapapi.search.route.BikingRouteResult;
-import com.baidu.mapapi.search.route.DrivingRoutePlanOption;
-import com.baidu.mapapi.search.route.DrivingRouteResult;
-import com.baidu.mapapi.search.route.IndoorRouteResult;
-import com.baidu.mapapi.search.route.MassTransitRouteResult;
-import com.baidu.mapapi.search.route.OnGetRoutePlanResultListener;
-import com.baidu.mapapi.search.route.PlanNode;
 import com.baidu.mapapi.search.route.RoutePlanSearch;
-import com.baidu.mapapi.search.route.TransitRouteResult;
-import com.baidu.mapapi.search.route.WalkingRoutePlanOption;
-import com.baidu.mapapi.search.route.WalkingRouteResult;
-import com.example.wangzw.bdmapdemo.overlayutil.DrivingRouteOverlay;
-import com.orhanobut.logger.Logger;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -63,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
     };
-    private RoutePlanSearch mSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBaiduMap = mMapView.getMap();
         //普通地图
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
         mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
@@ -95,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
-        mSearch.destroy();
     }
 
     @Override
@@ -115,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_search) {
-            startActivity(new Intent(MainActivity.this, RoutePlanDemo.class));
+            startActivity(new Intent(MainActivity.this, RoutePlanActivity.class));
         }
     }
 }
