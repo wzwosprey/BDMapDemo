@@ -16,6 +16,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapPoi;
 import com.baidu.mapapi.map.MapView;
@@ -68,9 +69,16 @@ public class RoutePlanActivity extends Activity implements BaiduMap.OnMapClickLi
     String startNodeStr = "天安门";
     String endNodeStr = "北京西站地铁";
 
+    private BDLocation myLocation = null;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routeplan);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            myLocation = extras.getParcelable("myLocation");
+        }
         CharSequence titleLable = "路线规划功能";
         setTitle(titleLable);
         // 初始化地图
@@ -86,6 +94,12 @@ public class RoutePlanActivity extends Activity implements BaiduMap.OnMapClickLi
         // 初始化搜索模块，注册事件监听
         mSearch = RoutePlanSearch.newInstance();
         mSearch.setOnGetRoutePlanResultListener(this);
+
+        if (myLocation != null && myLocation.getLatitude() != 0 && myLocation.getLongitude() != 0) {
+            startEt.setText("我的位置");
+        }else {
+            startEt.setText("天安门");
+        }
     }
 
     /**
@@ -108,7 +122,13 @@ public class RoutePlanActivity extends Activity implements BaiduMap.OnMapClickLi
         }
         // 处理搜索按钮响应
         // 设置起终点信息，对于tranist search 来说，城市名无意义
-        PlanNode stNode = PlanNode.withCityNameAndPlaceName("北京", startNodeStr);
+        PlanNode stNode;
+        if (myLocation != null && "我的位置".equals(startEt.getText().toString())) {
+            LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+            stNode = PlanNode.withLocation(latLng);
+        } else {
+            stNode = PlanNode.withCityNameAndPlaceName("北京", startNodeStr);
+        }
         PlanNode enNode = PlanNode.withCityNameAndPlaceName("北京", endNodeStr);
 
 

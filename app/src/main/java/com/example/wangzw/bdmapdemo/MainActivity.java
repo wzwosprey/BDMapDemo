@@ -3,6 +3,7 @@ package com.example.wangzw.bdmapdemo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.baidu.location.BDLocation;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private MapView mMapView = null;
     private BaiduMap mBaiduMap = null;
+    private BDLocation myLocation;
     /**
      * TODO 百度定位
      */
@@ -41,11 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mBaiduMap.setMyLocationConfiguration(config);
             // 当不需要定位图层时关闭定位图层
             //mBaiduMap.setMyLocationEnabled(false);
+            myLocation = bdLocation;
+            Log.e("onReceiveLocation","定位成功回调");
         }
 
         @Override
         public void onConnectHotSpotMessage(String s, int i) {
-
         }
     };
 
@@ -62,14 +65,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(14));
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
+        MyApplication app = (MyApplication) getApplication();
+        locationService = app.getLocationService();
+        locationService.registerListener(locationListener);
         mBaiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
                 //百度定位
-                MyApplication app = (MyApplication) getApplication();
-                locationService = app.getLocationService();
-                locationService.registerListener(locationListener);
                 locationService.start();
+                Log.e("onMapLoaded","地图加载完毕");
             }
         });
     }
@@ -99,7 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bt_search) {
-            startActivity(new Intent(MainActivity.this, RoutePlanActivity.class));
+            Intent intent = new Intent(MainActivity.this, RoutePlanActivity.class);
+            intent.putExtra("myLocation", myLocation);
+            startActivity(intent);
         }
     }
 }
