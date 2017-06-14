@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 import com.baidu.location.BDLocation;
@@ -19,7 +18,6 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.search.route.RoutePlanSearch;
 
 import java.util.ArrayList;
 
@@ -50,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // 当不需要定位图层时关闭定位图层
             //mBaiduMap.setMyLocationEnabled(false);
             myLocation = bdLocation;
-            Log.e("onReceiveLocation","定位成功回调");
         }
 
         @Override
@@ -86,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onMapLoaded() {
                 //百度定位
                 locationService.start();
-                Log.e("onMapLoaded","地图加载完毕");
             }
         });
     }
@@ -100,14 +96,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              * 定位权限为必须权限，用户如果禁止，则每次进入都会申请
              */
             // 定位精确位置
-            if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
             }
-            if(checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
-			/*
-			 * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
+            /*
+             * 读写权限和电话状态权限非必要权限(建议授予)只会申请一次，用户同意或者禁止，只会弹一次
 			 */
             // 读写权限
             if (addPermission(permissions, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -127,14 +123,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @TargetApi(23)
     private boolean addPermission(ArrayList<String> permissionsList, String permission) {
         if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) { // 如果应用没有获得对应权限,则添加到列表中,准备批量申请
-            if (shouldShowRequestPermissionRationale(permission)){
+            if (shouldShowRequestPermissionRationale(permission)) {
                 return true;
-            }else{
+            } else {
                 permissionsList.add(permission);
                 return false;
             }
 
-        }else{
+        } else {
             return true;
         }
     }
@@ -166,6 +162,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        //按返回键退出应用后重新进入时可重新定位，否则不能重新定位
+        if (locationService != null && locationListener != null) {
+            locationService.unregisterListener(locationListener); //注销掉监听
+            locationService.stop(); //停止定位服务
+        }
+        super.onStop();
     }
 
     @Override
